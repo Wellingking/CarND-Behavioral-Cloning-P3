@@ -1,7 +1,8 @@
 import csv
 import cv2
 import numpy as np
-path = '../carnd-behavioral-cloning/data_02/' #'../carnd-behavioral-cloning/data_02/'
+path = '../carnd-behavioral-cloning/data/' #'../carnd-behavioral-cloning/data_02/'
+#path = '../carnd-behavioral-cloning/data_02/' #'../carnd-behavioral-cloning/data_02/'
 lines = []
 with open(path + 'driving_log.csv') as csvfile:
     reader = csv.reader(csvfile)
@@ -11,15 +12,30 @@ with open(path + 'driving_log.csv') as csvfile:
 images = []
 measurements = []
 for line in lines:
-    for i in range(3):        
-        source_path = line[i]
-        filename = source_path.split('\\')[-1] #source_path.split('/')[-1] #
-        current_path = path + 'IMG/' + filename
-        image = cv2.imread(current_path)
-        images.append(image)
-        measurement = float(line[3])
-        measurements.append(measurement)    
-        #print(current_path)    
+#    for i in range(3):        
+    source_path = line[0]
+    filename = source_path.split('/')[-1] #source_path.split('/')[-1] #
+#    filename = source_path.split('\\')[-1] #source_path.split('/')[-1] #
+    current_path = path + 'IMG/' + filename
+    
+    left_path = line[1]
+    left_filename = source_path.split('/')[-1] #source_path.split('/')[-1] #
+#    left_filename = source_path.split('\\')[-1] #source_path.split('/')[-1] #
+    left_path = path + 'IMG/' + filename
+    
+    right_path = line[1]
+    right_filename = source_path.split('/')[-1] #source_path.split('/')[-1] #
+#    right_filename = source_path.split('\\')[-1] #source_path.split('/')[-1] #
+    right_path = path + 'IMG/' + filename
+    
+    image = cv2.imread(current_path)
+    image_left = cv2.imread(left_path)
+    image_right = cv2.imread(right_path)
+    
+    images.extend((image, image_left, image_right))
+    measurement = float(line[3])
+    measurements.extend((measurement, measurement-0.2, measurement+0.2))    
+    #print(current_path)    
 
 
 
